@@ -12,7 +12,7 @@ resource "aws_subnet" "control_plane_private_subnets" {
   ]
 
   tags = {
-    Name = "${var.vpc_name}-${var.environment}-Control-plane-subnet-${var.availability_zones[count.index]}"
+    Name = "${var.vpc_name}-${var.environment}-control-plane-subnet-${var.availability_zones[count.index]}"
   }
 
   lifecycle {
@@ -26,7 +26,7 @@ resource "aws_route_table" "control_plane_private_subnets_route_table" {
 
   vpc_id = aws_vpc.this[0].id
   tags = {
-    Name = "${var.vpc_name}-${var.environment}-Control-plane-route-table-${var.availability_zones[count.index]}"
+    Name = "${var.vpc_name}-${var.environment}-control-plane-route-table-${var.availability_zones[count.index]}"
   }
 }
 
@@ -35,7 +35,7 @@ resource "aws_route_table" "control_plane_private_subnets_route_table_tgw_attach
 
   vpc_id = aws_vpc.this[0].id
   tags = {
-    Name = "${var.vpc_name}-${var.environment}-Control-plane-route-table-${var.availability_zones[count.index]}"
+    Name = "${var.vpc_name}-${var.environment}-control-plane-route-table-${var.availability_zones[count.index]}"
   }
 }
 
@@ -58,7 +58,7 @@ resource "aws_eip" "control_plane_private_subnets_eip" {
 
   domain = "vpc"
   tags = {
-    Name = "${var.vpc_name}-${var.environment}-Control-plane-subnet-eip-${var.availability_zones[count.index]}"
+    Name = "${var.vpc_name}-${var.environment}-control-plane-subnet-eip-${var.availability_zones[count.index]}"
   }
 }
 
@@ -69,7 +69,7 @@ resource "aws_nat_gateway" "control_plan_public_subnets_nat_gateway" {
   allocation_id = aws_eip.control_plane_private_subnets_eip[0].id
   subnet_id     = aws_subnet.this[count.index].id
   tags = {
-    Name = "${var.vpc_name}-${var.environment}-Control-plane-subnet-nat-gateway-${var.availability_zones[count.index]}"
+    Name = "${var.vpc_name}-${var.environment}-control-plane-subnet-nat-gateway-${var.availability_zones[count.index]}"
   }
 }
 

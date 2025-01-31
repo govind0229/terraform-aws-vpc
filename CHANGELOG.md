@@ -33,4 +33,18 @@
 
 - readme.md file removed
 
+## [1.0.2] - 2025-01-31
 
+### Added
+
+- secondary VPC CIDR for EKS support
+
+### Changed
+
+- Change `public_subnets` variable to `public_subnets_cidr`
+- Update variables description
+- Update db subnet name
+
+### Removed
+
+- N/A

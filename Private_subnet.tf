@@ -1,4 +1,4 @@
-#  Worker Private subnet
+# Private subnet
 resource "aws_subnet" "private_subnets" {
   count                   = var.create_vpc && length(var.private_subnets_cidr) > 0 ? length(var.private_subnets_cidr) : 0
   vpc_id                  = aws_vpc.this[0].id
@@ -7,7 +7,7 @@ resource "aws_subnet" "private_subnets" {
   map_public_ip_on_launch = false
 
   tags = {
-    Name                              = "${var.vpc_name}-${var.environment}-Worker-private-subnet-${var.availability_zones[count.index]}"
+    Name                              = "${var.vpc_name}-${var.environment}-private-subnet-${var.availability_zones[count.index]}"
     "kubernetes.io/role/internal-elb" = "1"
   }
 
@@ -20,7 +20,7 @@ resource "aws_route_table" "private_subnets_route_table" {
 
   vpc_id = aws_vpc.this[0].id
   tags = {
-    Name = "${var.vpc_name}-${var.environment}-Worker-route-table-${var.availability_zones[count.index]}"
+    Name = "${var.vpc_name}-${var.environment}-private-subnet-route-table"
   }
 }
 
@@ -29,7 +29,7 @@ resource "aws_route_table" "private_subnets_route_table_tgw_attachment" {
 
   vpc_id = aws_vpc.this[0].id
   tags = {
-    Name = "${var.vpc_name}-${var.environment}-Worker-route-table-${var.availability_zones[count.index]}"
+    Name = "${var.vpc_name}-${var.environment}-private-subnet-route-table"
   }
 }
 
@@ -51,7 +51,7 @@ resource "aws_eip" "worker_public_subnet_eip" {
 
   domain = "vpc"
   tags = {
-    Name = "${var.vpc_name}-${var.environment}-Worker-eip-${var.availability_zones[count.index]}"
+    Name = "${var.vpc_name}-${var.environment}-private-subnet-eip-${var.availability_zones[count.index]}"
   }
 }
 
@@ -62,7 +62,7 @@ resource "aws_nat_gateway" "worker_public_subnet_nat_gateway" {
   allocation_id = aws_eip.worker_public_subnet_eip[count.index].id
   subnet_id     = aws_subnet.this[count.index].id
   tags = {
-    Name = "${var.vpc_name}-${var.environment}-Worker-public-nat-gateway-${var.availability_zones[count.index]}"
+    Name = "${var.vpc_name}-${var.environment}-private-subnet-public-nat-gateway-${var.availability_zones[count.index]}"
   }
 
   depends_on = [aws_subnet.this]
@@ -76,7 +76,7 @@ resource "aws_nat_gateway" "private_subnets_nat_gateway" {
   subnet_id         = aws_subnet.private_subnets[count.index].id
 
   tags = {
-    Name = "${var.vpc_name}-${var.environment}-Worker-private-nat-gateway-${var.availability_zones[count.index]}"
+    Name = "${var.vpc_name}-${var.environment}-private-subnet-private-nat-gateway-${var.availability_zones[count.index]}"
   }
 }
 

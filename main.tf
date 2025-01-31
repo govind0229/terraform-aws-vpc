@@ -31,11 +31,11 @@ resource "aws_vpc_ipv4_cidr_block_association" "this" {
 
 # Public/Private subnet
 resource "aws_subnet" "this" {
-  count                   = local.create_vpc && length(var.public_subnets) > 0 ? length(var.public_subnets) : 0
+  count                   = local.create_vpc && length(var.public_subnets_cidr) > 0 ? length(var.public_subnets_cidr) : 0
   vpc_id                  = aws_vpc.this[0].id
-  cidr_block              = var.public_subnets[count.index]
+  cidr_block              = var.public_subnets_cidr[count.index]
   availability_zone       = var.availability_zones[count.index]
-  map_public_ip_on_launch = length(var.public_subnets) > 0 ? true : false
+  map_public_ip_on_launch = length(var.public_subnets_cidr) > 0 ? true : false
 
   tags = {
     Name                     = "${var.vpc_name}-${var.environment}-public-subnet-${count.index}-${var.availability_zones[count.index]}"
@@ -66,7 +66,7 @@ resource "aws_internet_gateway" "this" {
 
 # Route
 resource "aws_route" "this" {
-  count                  = local.create_vpc && length(var.public_subnets) > 0 ? 1 : 0
+  count                  = local.create_vpc && length(var.public_subnets_cidr) > 0 ? 1 : 0
   route_table_id         = aws_vpc.this[0].default_route_table_id
   destination_cidr_block = "0.0.0.0/0"
   gateway_id             = aws_internet_gateway.this[0].id
@@ -74,7 +74,7 @@ resource "aws_route" "this" {
 
 # Subnet Association
 resource "aws_route_table_association" "this" {
-  count          = local.create_vpc && length(var.public_subnets) > 0 ? length(var.public_subnets) : 0
+  count          = local.create_vpc && length(var.public_subnets_cidr) > 0 ? length(var.public_subnets_cidr) : 0
   subnet_id      = aws_subnet.this[count.index].id
   route_table_id = aws_default_route_table.this[0].id
 }
