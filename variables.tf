@@ -11,13 +11,13 @@ variable "vpc_cidr_block" {
 }
 
 variable "secondary_cidr_blocks" {
-  description = "Secondary CIDR blocks for the VPC"
+  description = "Secondary CIDR blocks for the VPC (required for EKS)"
   type        = string
   default     = ""
 }
 
 variable "environment" {
-  description = "Environment"
+  description = "Environment (e.g. `prod`, `dev`, `staging`)"
   type        = string
   default     = ""
 }
@@ -28,8 +28,8 @@ variable "vpc_name" {
   default     = ""
 }
 
-variable "public_subnets" {
-  description = "Availability zones for the VPC"
+variable "public_subnets_cidr" {
+  description = "CIDR blocks for the Public subnets"
   type        = list(string)
   default     = []
 }
@@ -41,7 +41,7 @@ variable "teams" {
 }
 
 variable "availability_zones" {
-  description = "Availability zones for the VPC"
+  description = "Availability zones for the VPC subnets (e.g. `us-west-2a`, `us-west-2b`)"
   type        = list(string)
   default     = []
 }
@@ -65,7 +65,7 @@ variable "db_private_subnets_cidr" {
 }
 
 variable "transit_gateway_id" {
-  description = "ID of the Transit Gateway"
+  description = "ID of the Transit Gateway to attach to the VPC (required for EKS egress via TGW)"
   type        = string
   default     = ""
 }
